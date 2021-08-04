@@ -1,0 +1,44 @@
+
+- name: INSTALLING APACHE ON HOSTS
+  hosts: amz_hosts
+  become: true
+  tasks:
+    - name: update software packages
+      yum:
+        name: '*'
+        state: present
+    - name: install the latest version of apache
+      yum:
+        name: httpd
+        state: present
+    - name: Start httpd
+      ansible.builtin.service:
+        name: httpdL
+        state: started
+    - name: Enable service httpd
+      ansible.builtin.service:
+        name: httpd
+        enabled: yes
+    - name: Copy index.html file from controller to the clients
+      ansible.builtin.copy:
+        src: index.html
+        dest: /var/www/hml/
+    - name: Display a message
+      ansible.builtin.debug: 
+       msg: " This webserver has been launched by Danielle Tchonla "
+    - name: Pinging Amazon-Hosts
+      ansible.builtin.ping:
+
+- name: git installtion on ubuntu servers
+  hosts: ubuntu_hosts
+  become: yes
+  tasks:
+    - name: update software packages
+      apt:
+        name: '*'
+        state: present
+    - name: Install git
+      apt:
+       name: git
+       state: present
+       update_cache: yes
